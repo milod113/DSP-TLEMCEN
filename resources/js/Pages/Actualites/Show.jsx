@@ -1,6 +1,7 @@
+import RelatedContentSections from '@/Components/RelatedContentSections';
 import { Head, Link, usePage } from '@inertiajs/react';
 
-export default function ActualiteShow({ article }) {
+export default function ActualiteShow({ article, relatedArticles = [], relatedTopics = [], linkedDocuments = [] }) {
     const { messages, locale } = usePage().props;
     const m = (key) => messages?.[key] || key;
     const isAr = locale === 'ar';
@@ -19,6 +20,33 @@ export default function ActualiteShow({ article }) {
         .map((paragraph) => paragraph.trim())
         .filter(Boolean);
 
+    const usefulServices = [
+        {
+            code: 'SERVICES',
+            href: route('services'),
+            title: 'Services de sante',
+            description: 'Accedez aux services citoyens et aux informations pratiques.',
+        },
+        {
+            code: 'URGENCES',
+            href: route('services.urgences'),
+            title: "Centre d'urgence",
+            description: "Consultez les numeros utiles et les consignes en cas d'urgence.",
+        },
+        {
+            code: 'DOCUMENTS',
+            href: route('documents'),
+            title: 'Documents officiels',
+            description: 'Retrouvez les formulaires et documents a telecharger.',
+        },
+        {
+            code: 'CONTACT',
+            href: route('contact'),
+            title: 'Nous contacter',
+            description: 'Joignez rapidement les services de la DSP Tlemcen.',
+        },
+    ];
+
     return (
         <>
             <Head title={title} />
@@ -36,10 +64,7 @@ export default function ActualiteShow({ article }) {
                 </svg>
 
                 <div className="relative mx-auto max-w-5xl">
-                    <Link
-                        href={route('actualites')}
-                        className="inline-flex items-center gap-2 text-sm font-medium text-[#C3D9EE] transition hover:text-white"
-                    >
+                    <Link href={route('actualites')} className="inline-flex items-center gap-2 text-sm font-medium text-[#C3D9EE] transition hover:text-white">
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
@@ -54,10 +79,7 @@ export default function ActualiteShow({ article }) {
                             </span>
                         )}
 
-                        <h1
-                            className="mt-5 text-3xl leading-tight text-white md:text-5xl"
-                            style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
-                        >
+                        <h1 className="mt-5 text-3xl leading-tight text-white md:text-5xl" style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}>
                             {title}
                         </h1>
 
@@ -94,29 +116,21 @@ export default function ActualiteShow({ article }) {
                         <aside className="border-b border-[#E5ECF2] bg-[#F8FBFD] p-6 lg:border-b-0 lg:border-r">
                             <div className="space-y-6">
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">
-                                        {isAr ? 'Publication' : 'Publication'}
-                                    </p>
-                                    <div className="mt-2 text-sm font-medium text-[#13243A]">
-                                        {formattedDate || '-'}
-                                    </div>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">Publication</p>
+                                    <div className="mt-2 text-sm font-medium text-[#13243A]">{formattedDate || '-'}</div>
                                 </div>
 
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">
-                                        {isAr ? 'Categorie' : 'Categorie'}
-                                    </p>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">Categorie</p>
                                     <div className="mt-2">
                                         <span className="inline-flex rounded-full bg-[#E8F1F8] px-3 py-1.5 text-sm font-medium text-[#0F4C81]">
-                                            {article.category || (isAr ? 'Actualite' : 'Actualite')}
+                                            {article.category || 'Actualite'}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">
-                                        {isAr ? 'Navigation' : 'Navigation'}
-                                    </p>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#7B92A8]">Navigation</p>
                                     <div className="mt-3 flex flex-col gap-3">
                                         <Link
                                             href={route('actualites')}
@@ -138,31 +152,6 @@ export default function ActualiteShow({ article }) {
                                         </Link>
                                     </div>
                                 </div>
-
-                                <div className="rounded-2xl bg-gradient-to-br from-[#0A2540] via-[#0F3A5C] to-[#0A2540] p-5 text-white">
-                                    <p className="text-[11px] uppercase tracking-[0.16em] text-[#9DC2E6]">
-                                        {isAr ? 'Info utile' : 'Info utile'}
-                                    </p>
-                                    <h3
-                                        className="mt-2 text-lg"
-                                        style={{ fontFamily: "'Fraunces', serif", fontWeight: 500 }}
-                                    >
-                                        {isAr ? 'Besoin d aide ou d orientation ?' : "Besoin d'aide ou d'orientation ?"}
-                                    </h3>
-                                    <p className="mt-2 text-sm text-[#C3D9EE]">
-                                        {isAr
-                                            ? 'Retrouvez les services, la prevention et les informations d urgence depuis le portail.'
-                                            : 'Accedez rapidement aux services citoyens, a la prevention et aux informations d urgence.'}
-                                    </p>
-                                    <div className="mt-4 flex flex-wrap gap-3">
-                                        <Link href={route('services')} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-[#0A2540] transition hover:bg-[#E8F1F8]">
-                                            {m('services_citoyens')}
-                                        </Link>
-                                        <Link href={route('services.urgences')} className="rounded-xl border border-white/20 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10">
-                                            {m('urgences')}
-                                        </Link>
-                                    </div>
-                                </div>
                             </div>
                         </aside>
 
@@ -172,14 +161,7 @@ export default function ActualiteShow({ article }) {
                                 <div className="space-y-5 text-[15px] leading-8 text-[#33485C] md:text-[16px]">
                                     {contentParagraphs?.length > 0 ? (
                                         contentParagraphs.map((paragraph, index) => (
-                                            <p
-                                                key={`${index}-${paragraph.slice(0, 24)}`}
-                                                className={`${
-                                                    index === 0
-                                                        ? 'text-[18px] leading-8 text-[#13243A] md:text-[19px]'
-                                                        : ''
-                                                }`}
-                                            >
+                                            <p key={`${index}-${paragraph.slice(0, 24)}`} className={index === 0 ? 'text-[18px] leading-8 text-[#13243A] md:text-[19px]' : ''}>
                                                 {paragraph}
                                             </p>
                                         ))
@@ -188,6 +170,14 @@ export default function ActualiteShow({ article }) {
                                     )}
                                 </div>
                             </div>
+
+                            <RelatedContentSections
+                                locale={locale}
+                                relatedArticles={relatedArticles}
+                                relatedTopics={relatedTopics}
+                                linkedDocuments={linkedDocuments}
+                                usefulServices={usefulServices}
+                            />
                         </div>
                     </div>
                 </article>

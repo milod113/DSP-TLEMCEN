@@ -1,6 +1,13 @@
+import RelatedContentSections from '@/Components/RelatedContentSections';
 import { Head, Link, usePage } from '@inertiajs/react';
 
-export default function AppelOffreShow({ item, relatedItems = [] }) {
+export default function AppelOffreShow({
+    item,
+    relatedItems = [],
+    relatedArticles = [],
+    relatedTopics = [],
+    linkedDocuments = [],
+}) {
     const { messages, locale } = usePage().props;
     const m = (key) => messages?.[key] || key;
     const isAr = locale === 'ar';
@@ -19,12 +26,39 @@ export default function AppelOffreShow({ item, relatedItems = [] }) {
         .filter(Boolean);
 
     const status = !hasDeadline
-        ? { label: isAr ? 'Permanent' : 'Permanent', classes: 'bg-blue-100 text-blue-700 border-blue-200' }
+        ? { label: 'Permanent', classes: 'bg-blue-100 text-blue-700 border-blue-200' }
         : isExpired
-          ? { label: isAr ? 'Expire' : 'Expire', classes: 'bg-red-100 text-red-700 border-red-200' }
+          ? { label: 'Expire', classes: 'bg-red-100 text-red-700 border-red-200' }
           : daysLeft <= 7
-            ? { label: isAr ? `Urgent • ${daysLeft}j` : `Urgent • ${daysLeft}j`, classes: 'bg-orange-100 text-orange-700 border-orange-200' }
-            : { label: isAr ? 'Ouvert' : 'Ouvert', classes: 'bg-green-100 text-green-700 border-green-200' };
+            ? { label: `Urgent - ${daysLeft}j`, classes: 'bg-orange-100 text-orange-700 border-orange-200' }
+            : { label: 'Ouvert', classes: 'bg-green-100 text-green-700 border-green-200' };
+
+    const usefulServices = [
+        {
+            code: 'DOCUMENTS',
+            href: route('documents'),
+            title: 'Documents administratifs',
+            description: 'Consultez les documents complements et ressources utiles.',
+        },
+        {
+            code: 'SERVICES',
+            href: route('services'),
+            title: 'Services citoyens',
+            description: 'Accedez aux services publics proposes par la DSP.',
+        },
+        {
+            code: 'CONTACT',
+            href: route('contact'),
+            title: 'Contact administratif',
+            description: "Prenez contact pour toute demande d'information complementaire.",
+        },
+        {
+            code: 'URGENCES',
+            href: route('services.urgences'),
+            title: "Services d'urgence",
+            description: 'Retrouvez les numeros et orientations prioritaires.',
+        },
+    ];
 
     return (
         <>
@@ -144,6 +178,14 @@ export default function AppelOffreShow({ item, relatedItems = [] }) {
                                     <p>{description}</p>
                                 )}
                             </div>
+
+                            <RelatedContentSections
+                                locale={locale}
+                                relatedArticles={relatedArticles}
+                                relatedTopics={relatedTopics}
+                                linkedDocuments={linkedDocuments}
+                                usefulServices={usefulServices}
+                            />
                         </div>
                     </div>
                 </article>

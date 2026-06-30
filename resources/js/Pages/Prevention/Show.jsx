@@ -1,6 +1,7 @@
+import RelatedContentSections from '@/Components/RelatedContentSections';
 import { Head, Link, usePage } from '@inertiajs/react';
 
-export default function PreventionShow({ topic }) {
+export default function PreventionShow({ topic, similarTopics = [], relatedArticles = [], linkedDocuments = [] }) {
     const { messages, locale } = usePage().props;
     const m = (key) => messages?.[key] || key;
     const isAr = locale === 'ar';
@@ -12,6 +13,33 @@ export default function PreventionShow({ topic }) {
         ?.split('\n')
         .map((paragraph) => paragraph.trim())
         .filter(Boolean);
+
+    const usefulServices = [
+        {
+            code: 'PREVENTION',
+            href: route('prevention'),
+            title: 'Tous les sujets de prevention',
+            description: 'Parcourez les campagnes de sensibilisation et les conseils de sante.',
+        },
+        {
+            code: 'URGENCES',
+            href: route('services.urgences'),
+            title: "Orientation d'urgence",
+            description: 'Trouvez rapidement les numeros et services utiles.',
+        },
+        {
+            code: 'SERVICES',
+            href: route('services'),
+            title: 'Services de proximite',
+            description: 'Consultez les structures et services disponibles pour les citoyens.',
+        },
+        {
+            code: 'CONTACT',
+            href: route('contact'),
+            title: "Besoin d'orientation",
+            description: 'Contactez-nous pour obtenir une aide ou une information complementaire.',
+        },
+    ];
 
     return (
         <>
@@ -30,10 +58,7 @@ export default function PreventionShow({ topic }) {
                 </svg>
 
                 <div className="relative mx-auto max-w-5xl">
-                    <Link
-                        href={route('prevention')}
-                        className="inline-flex items-center gap-2 text-sm font-medium text-emerald-100 transition hover:text-white"
-                    >
+                    <Link href={route('prevention')} className="inline-flex items-center gap-2 text-sm font-medium text-emerald-100 transition hover:text-white">
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
@@ -43,20 +68,15 @@ export default function PreventionShow({ topic }) {
                     <div className="mt-8 max-w-4xl">
                         <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-emerald-50 backdrop-blur-sm">
                             <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                            {category || (isAr ? 'Prevention' : 'Prevention')}
+                            {category || 'Prevention'}
                         </span>
 
-                        <h1
-                            className="mt-5 text-3xl leading-tight text-white md:text-5xl"
-                            style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}
-                        >
+                        <h1 className="mt-5 text-3xl leading-tight text-white md:text-5xl" style={{ fontFamily: "'Fraunces', serif", fontWeight: 600 }}>
                             {title}
                         </h1>
 
                         <p className="mt-5 max-w-3xl text-base leading-7 text-emerald-50/90 md:text-lg">
-                            {isAr
-                                ? 'Des conseils de prevention et de sensibilisation pour aider les citoyens a mieux proteger leur sante au quotidien.'
-                                : 'Des conseils de prevention et de sensibilisation pour aider les citoyens a mieux proteger leur sante au quotidien.'}
+                            Des conseils de prevention et de sensibilisation pour aider les citoyens a mieux proteger leur sante au quotidien.
                         </p>
                     </div>
                 </div>
@@ -75,31 +95,23 @@ export default function PreventionShow({ topic }) {
                         <aside className="border-b border-[#E5ECF2] bg-[#F7FCFA] p-6 lg:border-b-0 lg:border-r">
                             <div className="space-y-6">
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">
-                                        {isAr ? 'Theme' : 'Theme'}
-                                    </p>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">Theme</p>
                                     <div className="mt-2">
                                         <span className="inline-flex rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-700">
-                                            {category || (isAr ? 'Prevention' : 'Prevention')}
+                                            {category || 'Prevention'}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">
-                                        {isAr ? 'Objectif' : 'Objectif'}
-                                    </p>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">Objectif</p>
                                     <p className="mt-2 text-sm leading-relaxed text-[#4C625A]">
-                                        {isAr
-                                            ? 'Informer, prevenir et encourager les bons reflexes de sante.'
-                                            : 'Informer, prevenir et encourager les bons reflexes de sante.'}
+                                        Informer, prevenir et encourager les bons reflexes de sante.
                                     </p>
                                 </div>
 
                                 <div>
-                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">
-                                        {isAr ? 'Navigation' : 'Navigation'}
-                                    </p>
+                                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#6E8B81]">Navigation</p>
                                     <div className="mt-3 flex flex-col gap-3">
                                         <Link
                                             href={route('prevention')}
@@ -108,7 +120,7 @@ export default function PreventionShow({ topic }) {
                                             <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                             </svg>
-                                            {isAr ? 'Tous les sujets' : 'Tous les sujets'}
+                                            Tous les sujets
                                         </Link>
                                         <Link
                                             href={route('services.urgences')}
@@ -121,31 +133,6 @@ export default function PreventionShow({ topic }) {
                                         </Link>
                                     </div>
                                 </div>
-
-                                <div className="rounded-2xl bg-gradient-to-br from-[#0A3A2D] via-[#0F5A44] to-[#0A3A2D] p-5 text-white">
-                                    <p className="text-[11px] uppercase tracking-[0.16em] text-emerald-100">
-                                        {isAr ? 'Conseil pratique' : 'Conseil pratique'}
-                                    </p>
-                                    <h3
-                                        className="mt-2 text-lg"
-                                        style={{ fontFamily: "'Fraunces', serif", fontWeight: 500 }}
-                                    >
-                                        {isAr ? 'Adoptez les bons reflexes' : 'Adoptez les bons reflexes'}
-                                    </h3>
-                                    <p className="mt-2 text-sm text-emerald-50/90">
-                                        {isAr
-                                            ? 'La prevention repose sur l information, l attention aux symptomes et le recours rapide au bon service.'
-                                            : 'La prevention repose sur l information, l attention aux symptomes et le recours rapide au bon service.'}
-                                    </p>
-                                    <div className="mt-4 flex flex-wrap gap-3">
-                                        <Link href={route('services')} className="rounded-xl bg-white px-4 py-2 text-sm font-medium text-[#0A3A2D] transition hover:bg-emerald-50">
-                                            {m('services_citoyens')}
-                                        </Link>
-                                        <Link href={route('contact')} className="rounded-xl border border-white/20 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10">
-                                            {m('contactez_nous')}
-                                        </Link>
-                                    </div>
-                                </div>
                             </div>
                         </aside>
 
@@ -155,14 +142,7 @@ export default function PreventionShow({ topic }) {
                                 <div className="space-y-5 text-[15px] leading-8 text-[#33485C] md:text-[16px]">
                                     {contentParagraphs?.length > 0 ? (
                                         contentParagraphs.map((paragraph, index) => (
-                                            <p
-                                                key={`${index}-${paragraph.slice(0, 24)}`}
-                                                className={`${
-                                                    index === 0
-                                                        ? 'text-[18px] leading-8 text-[#13243A] md:text-[19px]'
-                                                        : ''
-                                                }`}
-                                            >
+                                            <p key={`${index}-${paragraph.slice(0, 24)}`} className={index === 0 ? 'text-[18px] leading-8 text-[#13243A] md:text-[19px]' : ''}>
                                                 {paragraph}
                                             </p>
                                         ))
@@ -171,6 +151,14 @@ export default function PreventionShow({ topic }) {
                                     )}
                                 </div>
                             </div>
+
+                            <RelatedContentSections
+                                locale={locale}
+                                relatedArticles={relatedArticles}
+                                relatedTopics={similarTopics}
+                                linkedDocuments={linkedDocuments}
+                                usefulServices={usefulServices}
+                            />
                         </div>
                     </div>
                 </article>

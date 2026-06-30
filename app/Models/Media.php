@@ -12,6 +12,12 @@ class Media extends Model
         'file_path', 'video_url', 'thumbnail', 'categorie', 'is_published', 'sort_order',
     ];
 
+    protected $appends = [
+        'file_url',
+        'thumbnail_url',
+        'video_id',
+    ];
+
     protected function casts(): array
     {
         return ['is_published' => 'boolean'];
@@ -29,12 +35,16 @@ class Media extends Model
 
     public function getFileUrlAttribute()
     {
-        return $this->file_path ? Storage::url($this->file_path) : null;
+        if (!$this->file_path) return null;
+        if (str_starts_with($this->file_path, 'http')) return $this->file_path;
+        return Storage::url($this->file_path);
     }
 
     public function getThumbnailUrlAttribute()
     {
-        return $this->thumbnail ? Storage::url($this->thumbnail) : null;
+        if (!$this->thumbnail) return null;
+        if (str_starts_with($this->thumbnail, 'http')) return $this->thumbnail;
+        return Storage::url($this->thumbnail);
     }
 
     public function getVideoIdAttribute()

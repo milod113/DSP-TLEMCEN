@@ -112,8 +112,18 @@ export default function MediaIndex({ items, categories, filters }) {
                                         )}
                                         <div className="mt-3 flex items-center gap-2">
                                             <button onClick={() => setLightbox(item)} className="text-xs font-medium text-[#0F4C81] hover:text-[#0A2540] transition">
-                                                {itemIsVideo(item) ? 'Regarder' : 'Voir'}
+                                                {itemIsVideo(item) ? 'Regarder' : 'Aperçu'}
                                             </button>
+                                            {(itemIsImage(item) || itemIsPoster(item)) && (
+                                                <Link href={route('mediatheque.show', item.id)} className="text-xs font-medium text-[#0F4C81] hover:text-[#0A2540] transition">
+                                                    Détails →
+                                                </Link>
+                                            )}
+                                            {itemIsVideo(item) && (
+                                                <Link href={route('mediatheque.show', item.id)} className="text-xs font-medium text-[#0F4C81] hover:text-[#0A2540] transition">
+                                                    Détails →
+                                                </Link>
+                                            )}
                                             {itemIsPoster(item) && (
                                                 <a href={item.file_url} target="_blank" className="text-xs font-medium text-emerald-600 hover:text-emerald-700 transition">
                                                     Télécharger ↓

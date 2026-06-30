@@ -1,4 +1,4 @@
-import { Head, usePage, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
 import PageHero from '../Components/PageHero';
 
 export default function Direction() {
@@ -11,13 +11,31 @@ export default function Direction() {
     };
 
     const motNom = pc('mot_directeur_nom') || 'Dr. Mohamed Benali';
-    const motTitre = pc('mot_directeur_titre') || 'Directeur de la Santé';
+    const motTitre = pc('mot_directeur_titre') || 'Directeur de la Sante';
     const motMessage = pc('mot_directeur_message');
+    const directeurImageRaw = pc('mot_directeur_image');
+    const directeurImage = directeurImageRaw
+        ? (directeurImageRaw.startsWith('http') || directeurImageRaw.startsWith('/')
+            ? directeurImageRaw
+            : `/storage/${directeurImageRaw}`)
+        : null;
+
     const missionsList = (() => {
-        try { const raw = pc('missions_list'); return raw ? JSON.parse(raw) : null; } catch { return null; }
+        try {
+            const raw = pc('missions_list');
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
     })();
+
     const organigrammeServices = (() => {
-        try { const raw = pc('organigramme_services'); return raw ? JSON.parse(raw) : null; } catch { return null; }
+        try {
+            const raw = pc('organigramme_services');
+            return raw ? JSON.parse(raw) : null;
+        } catch {
+            return null;
+        }
     })();
 
     return (
@@ -26,21 +44,26 @@ export default function Direction() {
 
             <PageHero
                 title={m('menu_direction')}
-                description={pc('direction_hero_description') || 'Présentation de la Direction de la Santé et de la Population de la wilaya de Tlemcen'}
-                badge="Direction de la Santé"
+                description={pc('direction_hero_description') || 'Presentation de la Direction de la Sante et de la Population de la wilaya de Tlemcen'}
+                badge="Direction de la Sante"
             />
 
             <div className="mx-auto max-w-5xl px-4 pb-16 md:pb-20">
-                {/* ============ MOT DU DIRECTEUR ============ */}
                 <section className="-mt-8 relative z-10 mb-10 overflow-hidden rounded-2xl bg-white shadow-[0_8px_40px_-12px_rgba(10,37,64,0.15)]">
                     <div className="grid grid-cols-1 md:grid-cols-3">
-                        <div className="relative col-span-1 min-h-[250px] bg-gradient-to-br from-[#0A2540] to-[#0F4C81] p-8 flex items-center justify-center overflow-hidden">
+                        <div className="relative col-span-1 flex min-h-[250px] items-center justify-center overflow-hidden bg-gradient-to-br from-[#0A2540] to-[#0F4C81] p-8">
                             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#1A5A8C_0%,_transparent_70%)] opacity-30" />
                             <div className="relative text-center">
-                                <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border-2 border-white/20 bg-white/10 transition-transform hover:scale-105 duration-300">
-                                    <svg className="h-10 w-10 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                    </svg>
+                                <div className="mx-auto mb-4 h-28 w-28 overflow-hidden rounded-full border-4 border-white/15 bg-white/10 shadow-[0_12px_28px_-10px_rgba(0,0,0,0.35)] transition-transform duration-300 hover:scale-105">
+                                    {directeurImage ? (
+                                        <img src={directeurImage} alt={motNom} className="h-full w-full object-cover" />
+                                    ) : (
+                                        <div className="flex h-full w-full items-center justify-center">
+                                            <svg className="h-10 w-10 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                            </svg>
+                                        </div>
+                                    )}
                                 </div>
                                 <h3 className="text-lg font-semibold text-white">{motNom}</h3>
                                 <p className="text-sm text-[#9DC2E6]">{motTitre}</p>
@@ -55,28 +78,26 @@ export default function Direction() {
                                 <svg className="absolute -left-2 -top-2 h-8 w-8 text-[#DCE6EF]" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z" />
                                 </svg>
-                                <p className="pl-6 text-[15px] leading-relaxed text-[#13243A] italic">
-                                    {motMessage || m('mot_directeur') || 'Bienvenue sur le site officiel de la Direction de la Santé et de la Population de la wilaya de Tlemcen.'}
+                                <p className="pl-6 text-[15px] italic leading-relaxed text-[#13243A]">
+                                    {motMessage || m('mot_directeur') || 'Bienvenue sur le site officiel de la Direction de la Sante et de la Population de la wilaya de Tlemcen.'}
                                 </p>
                             </blockquote>
                         </div>
                     </div>
                 </section>
 
-                {/* ============ MISSIONS & ORGANIGRAMME ============ */}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    {/* Missions */}
                     <div className="rounded-2xl border border-[#DCE6EF] bg-white p-8 transition-all duration-300 hover:border-[#B7CCDE] hover:shadow-[0_8px_30px_-8px_rgba(10,37,64,0.10)]">
                         <div className="mb-5 flex items-center gap-3">
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 text-2xl">
-                                🎯
+                                O
                             </div>
                             <h2 className="text-xl font-semibold text-[#0A2540]" style={{ fontFamily: "'Fraunces', serif", fontWeight: 500 }}>
                                 {m('missions')}
                             </h2>
                         </div>
                         <ul className="space-y-3 text-[15px] text-[#5C7184]">
-                            {(missionsList || ['Mise en œuvre de la politique sanitaire nationale','Gestion et coordination des établissements de santé','Programmes de prévention et promotion de la santé','Contrôle sanitaire et veille épidémiologique','Formation et développement des ressources humaines']).map((item, i) => (
+                            {(missionsList || ['Mise en oeuvre de la politique sanitaire nationale', 'Gestion et coordination des etablissements de sante', 'Programmes de prevention et promotion de la sante', 'Controle sanitaire et veille epidemiologique', 'Formation et developpement des ressources humaines']).map((item, i) => (
                                 <li key={i} className="flex items-start gap-3">
                                     <span className="mt-1.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#E8F1F8] text-[10px] font-bold text-[#0F4C81]">
                                         {i + 1}
@@ -87,28 +108,27 @@ export default function Direction() {
                         </ul>
                     </div>
 
-                    {/* Organigramme */}
                     <div className="rounded-2xl border border-[#DCE6EF] bg-white p-8 transition-all duration-300 hover:border-[#B7CCDE] hover:shadow-[0_8px_30px_-8px_rgba(10,37,64,0.10)]">
                         <div className="mb-5 flex items-center gap-3">
                             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-50 to-teal-50 text-2xl">
-                                📊
+                                +
                             </div>
                             <h2 className="text-xl font-semibold text-[#0A2540]" style={{ fontFamily: "'Fraunces', serif", fontWeight: 500 }}>
                                 {m('organigramme')}
                             </h2>
                         </div>
                         <p className="mb-5 text-[15px] text-[#5C7184]">
-                            {pc('organigramme_description') || 'La DSP de Tlemcen est structurée en services spécialisés pour assurer une gestion efficace du secteur sanitaire.'}
+                            {pc('organigramme_description') || 'La DSP de Tlemcen est structuree en services specialises pour assurer une gestion efficace du secteur sanitaire.'}
                         </p>
                         <div className="space-y-2">
                             <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-[#0A2540] to-[#0F4C81] p-4 text-sm shadow-md">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-white font-bold text-xs">D</div>
+                                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 text-xs font-bold text-white">D</div>
                                 <span className="font-semibold text-white">Direction</span>
-                                <span className="text-blue-200">— {motTitre}</span>
+                                <span className="text-blue-200">- {motTitre}</span>
                             </div>
                             <div className="grid grid-cols-2 gap-2">
-                                {(organigrammeServices || ['Santé publique','Gestion des EPH','Prévention','Ressources humaines','Finances','Informatique médicale']).map((service) => (
-                                    <div key={service} className="rounded-xl border border-[#E5ECF2] bg-white p-3.5 text-center text-xs font-medium text-[#13243A] transition-all hover:border-[#B7CCDE] hover:bg-[#F7F9FB] hover:shadow-sm hover:-translate-y-0.5">
+                                {(organigrammeServices || ['Sante publique', 'Gestion des EPH', 'Prevention', 'Ressources humaines', 'Finances', 'Informatique medicale']).map((service) => (
+                                    <div key={service} className="rounded-xl border border-[#E5ECF2] bg-white p-3.5 text-center text-xs font-medium text-[#13243A] transition-all hover:-translate-y-0.5 hover:border-[#B7CCDE] hover:bg-[#F7F9FB] hover:shadow-sm">
                                         {service}
                                     </div>
                                 ))}
@@ -117,11 +137,10 @@ export default function Direction() {
                     </div>
                 </div>
 
-                {/* ============ CONTACT ============ */}
                 <section className="mt-8 overflow-hidden rounded-2xl bg-white shadow-[0_8px_40px_-12px_rgba(10,37,64,0.12)]">
                     <div className="border-b border-[#E5ECF2] bg-[#F7F9FB] px-8 py-5">
                         <div className="flex items-center gap-3">
-                            <span className="text-2xl">📬</span>
+                            <span className="text-2xl">@</span>
                             <h2 className="text-xl font-semibold text-[#0A2540]" style={{ fontFamily: "'Fraunces', serif", fontWeight: 500 }}>
                                 {m('contact_officiel')}
                             </h2>
@@ -138,7 +157,7 @@ export default function Direction() {
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium text-[#13243A]">{m('adresse')}</p>
-                                    <p className="text-sm text-[#5C7184]">{pc('direction_adresse') || 'Direction de la Santé et de la Population, Wilaya de Tlemcen'}</p>
+                                    <p className="text-sm text-[#5C7184]">{pc('direction_adresse') || 'Direction de la Sante et de la Population, Wilaya de Tlemcen'}</p>
                                 </div>
                             </div>
                             <div className="flex items-start gap-4 group">

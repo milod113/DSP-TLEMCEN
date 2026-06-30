@@ -43,7 +43,21 @@ class MediaController extends Controller
             'categorie' => 'nullable|string|max:100',
             'sort_order' => 'nullable|integer',
             'is_published' => 'in:0,1,true,false',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:8192',
+            'thumb' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
+
+        if (in_array($request->input('type'), ['image', 'poster'], true) && !$request->hasFile('file') && !$request->filled('file_path')) {
+            return back()->withErrors([
+                'file' => 'Le fichier est obligatoire pour une image ou une affiche.',
+            ])->withInput();
+        }
+
+        if ($request->input('type') === 'video' && !$request->filled('video_url')) {
+            return back()->withErrors([
+                'video_url' => 'Le lien video est obligatoire pour ce type de media.',
+            ])->withInput();
+        }
 
         $data['is_published'] = filter_var($data['is_published'] ?? true, FILTER_VALIDATE_BOOLEAN);
 
@@ -57,7 +71,7 @@ class MediaController extends Controller
 
         Media::create($data);
 
-        return redirect()->route('admin.media.index')->with('success', 'Média créé.');
+        return redirect()->route('admin.media.index')->with('success', 'Media cree.');
     }
 
     public function update(Request $request, Media $media)
@@ -74,7 +88,21 @@ class MediaController extends Controller
             'categorie' => 'nullable|string|max:100',
             'sort_order' => 'nullable|integer',
             'is_published' => 'in:0,1,true,false',
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:8192',
+            'thumb' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
         ]);
+
+        if (in_array($request->input('type'), ['image', 'poster'], true) && !$request->hasFile('file') && !$request->filled('file_path') && !$media->file_path) {
+            return back()->withErrors([
+                'file' => 'Le fichier est obligatoire pour une image ou une affiche.',
+            ])->withInput();
+        }
+
+        if ($request->input('type') === 'video' && !$request->filled('video_url') && !$media->video_url) {
+            return back()->withErrors([
+                'video_url' => 'Le lien video est obligatoire pour ce type de media.',
+            ])->withInput();
+        }
 
         $data['is_published'] = filter_var($data['is_published'] ?? true, FILTER_VALIDATE_BOOLEAN);
 
@@ -88,12 +116,13 @@ class MediaController extends Controller
 
         $media->update($data);
 
-        return redirect()->route('admin.media.index')->with('success', 'Média mis à jour.');
+        return redirect()->route('admin.media.index')->with('success', 'Media mis a jour.');
     }
 
     public function destroy(Media $media)
     {
         $media->delete();
-        return redirect()->route('admin.media.index')->with('success', 'Média supprimé.');
+
+        return redirect()->route('admin.media.index')->with('success', 'Media supprime.');
     }
 }
